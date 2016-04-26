@@ -9,12 +9,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -22,9 +26,13 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MenjacnicaGUI extends JFrame {
 
@@ -103,6 +111,16 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmNewMenuItem() {
 		if (mntmNewMenuItem == null) {
 			mntmNewMenuItem = new JMenuItem("Open");
+			mntmNewMenuItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					JFileChooser fc = new JFileChooser();
+					int povVrednost = fc.showOpenDialog(getTextArea());
+					if(povVrednost == JFileChooser.APPROVE_OPTION) {
+						File fajl = fc.getSelectedFile();
+						textArea.setText(textArea.getText() + " Ucitan fajl: " + fajl + "\n");
+					}
+				}
+			});
 			mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 			mntmNewMenuItem.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/Directory.gif")));
 		}
@@ -111,6 +129,16 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmSave() {
 		if (mntmSave == null) {
 			mntmSave = new JMenuItem("Save");
+			mntmSave.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JFileChooser fc = new JFileChooser();
+					int povVrednost = fc.showOpenDialog(getTextArea());
+					if(povVrednost == JFileChooser.APPROVE_OPTION) {
+						File fajl = fc.getSelectedFile();
+						textArea.setText(textArea.getText() + " Sacuvan fajl: " + fajl + "\n");
+					}
+				}
+			});
 			mntmSave.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 			mntmSave.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/FloppyDrive.gif")));
 		}
@@ -119,6 +147,14 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmExit() {
 		if (mntmExit == null) {
 			mntmExit = new JMenuItem("Exit");
+			mntmExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int opcija = JOptionPane.showConfirmDialog(contentPane, "Da li zelite da zatvorite program?", "Izlazak", JOptionPane.YES_NO_CANCEL_OPTION);
+					if(opcija == JOptionPane.YES_OPTION) {
+						System.exit(0);
+					}
+				}
+			});
 			mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
 		}
 		return mntmExit;
@@ -133,6 +169,11 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmAbout() {
 		if (mntmAbout == null) {
 			mntmAbout = new JMenuItem("About");
+			mntmAbout.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(contentPane, "Autor ovog programa je Jovan Matic, naziv fakulteta je FON, broj indeksa je 124/14!");
+				}
+			});
 		}
 		return mntmAbout;
 	}
