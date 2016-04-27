@@ -1,8 +1,6 @@
 package menjacnica.gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -30,7 +28,9 @@ import java.io.File;
 
 import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
+import kurs.Kurs;
+import menjacnica.gui.model.KursTableModel;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -56,22 +56,6 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem mntmIzvrsiZamenu;
 	private JScrollPane scrollPane_1;
 	private JTextArea textArea;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MenjacnicaGUI frame = new MenjacnicaGUI();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -149,10 +133,7 @@ public class MenjacnicaGUI extends JFrame {
 			mntmExit = new JMenuItem("Exit");
 			mntmExit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int opcija = JOptionPane.showConfirmDialog(contentPane, "Da li zelite da zatvorite program?", "Izlazak", JOptionPane.YES_NO_CANCEL_OPTION);
-					if(opcija == JOptionPane.YES_OPTION) {
-						System.exit(0);
-					}
+					GUIKontroler.izadjiIzAplikacije();
 				}
 			});
 			mntmExit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK));
@@ -190,6 +171,11 @@ public class MenjacnicaGUI extends JFrame {
 	private JButton getBtnDodajKurs() {
 		if (btnDodajKurs == null) {
 			btnDodajKurs = new JButton("Dodaj kurs");
+			btnDodajKurs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GUIKontroler.pokreniProzorDodajKursGUI();
+				}
+			});
 			btnDodajKurs.setPreferredSize(new Dimension(115, 25));
 		}
 		return btnDodajKurs;
@@ -218,21 +204,10 @@ public class MenjacnicaGUI extends JFrame {
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
-			table.setModel(new DefaultTableModel(
-				new Object[][] {
-				},
-				new String[] {
-					"Sifra", "Skraceni naziv", "Prodajni", "Srednji", "Kupovni", "Naziv"
-				}
-			) {
-				boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false, false
-				};
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
-			});
-			table.getColumnModel().getColumn(4).setPreferredWidth(76);
+			
+				
+			table.setEnabled(false);
+			table.setModel(new KursTableModel(GUIKontroler.getKurs()));
 			table.setFillsViewportHeight(true);
 			addPopup(table, getPopupMenu());
 		}
@@ -267,6 +242,11 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmDodajKurs() {
 		if (mntmDodajKurs == null) {
 			mntmDodajKurs = new JMenuItem("Dodaj kurs");
+			mntmDodajKurs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GUIKontroler.pokreniProzorDodajKursGUI();					
+				}
+			});
 		}
 		return mntmDodajKurs;
 	}
@@ -285,6 +265,8 @@ public class MenjacnicaGUI extends JFrame {
 	private JScrollPane getScrollPane_1() {
 		if (scrollPane_1 == null) {
 			scrollPane_1 = new JScrollPane();
+			scrollPane_1.setRequestFocusEnabled(false);
+			scrollPane_1.setOpaque(false);
 			scrollPane_1.setViewportView(getTextArea());
 		}
 		return scrollPane_1;
@@ -295,5 +277,27 @@ public class MenjacnicaGUI extends JFrame {
 			textArea.setBorder(new TitledBorder(null, "STATUS", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		}
 		return textArea;
+	}
+
+	public void refreshTable() {
+		KursTableModel model = (KursTableModel) table.getModel();
+		model.PostaviKurseve(GUIKontroler.getKurs());
+	}
+
+	public void upisiUPolje(double sifra, String naziv, double prodajniKurs, double srednjiKurs, double kupovniKurs,
+			String skraceniNaziv) {
+		Kurs noviKurs = new Kurs();
+		noviKurs.setSifra(sifra);
+		noviKurs.setNaziv(naziv);
+		noviKurs.setProdajniKurs(prodajniKurs);
+		noviKurs.setSrednjiKurs(srednjiKurs);
+		noviKurs.setKupovniKurs(kupovniKurs);
+		noviKurs.setSkraceniNaziv(skraceniNaziv);
+		
+		try {
+			textArea.setText(textArea.getText() + noviKurs + "\n");
+		} catch(Exception e) {
+			textArea.setText(textArea.getText() + " " + e.getMessage());
+		}
 	}
 }
