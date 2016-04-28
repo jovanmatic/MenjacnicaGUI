@@ -183,6 +183,11 @@ public class MenjacnicaGUI extends JFrame {
 	private JButton getBtnIzbrisiKurs() {
 		if (btnIzbrisiKurs == null) {
 			btnIzbrisiKurs = new JButton("Izbrisi kurs");
+			btnIzbrisiKurs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					izbrisi();
+				}
+			});
 			btnIzbrisiKurs.setPreferredSize(new Dimension(115, 25));
 		}
 		return btnIzbrisiKurs;
@@ -204,9 +209,8 @@ public class MenjacnicaGUI extends JFrame {
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
-			
-				
-			table.setEnabled(false);
+			table.setColumnSelectionAllowed(true);
+			table.setCellSelectionEnabled(true);
 			table.setModel(new KursTableModel(GUIKontroler.getKurs()));
 			table.setFillsViewportHeight(true);
 			addPopup(table, getPopupMenu());
@@ -253,6 +257,11 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenuItem getMntmIzbrisiKurs() {
 		if (mntmIzbrisiKurs == null) {
 			mntmIzbrisiKurs = new JMenuItem("Izbrisi kurs");
+			mntmIzbrisiKurs.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					izbrisi();
+				}
+			});
 		}
 		return mntmIzbrisiKurs;
 	}
@@ -298,6 +307,24 @@ public class MenjacnicaGUI extends JFrame {
 			textArea.setText(textArea.getText() + noviKurs + "\n");
 		} catch(Exception e) {
 			textArea.setText(textArea.getText() + " " + e.getMessage());
+		}
+	}
+	
+	public void izbrisi() {
+		int index = table.getSelectedRow();
+		if(index == -1) {
+			GUIKontroler.izborRedaZaBrisanje();
+		} else {
+			int opcija = JOptionPane.showConfirmDialog(null, "Da li zaista zelite da izbrisete oznaceni red?", "Poruka o brisanju", JOptionPane.YES_NO_OPTION);
+			if(opcija == JOptionPane.YES_OPTION) {
+				KursTableModel model = (KursTableModel) table.getModel();
+				Kurs kurs = model.getKurs(index);
+				GUIKontroler.izbrisiOznaceniRed(kurs);
+				JOptionPane.showInternalMessageDialog(contentPane, "Brisanje kursa je uspesno izvrseno!");
+				textArea.setText(textArea.getText() + "Izbrisan je red sa indeksom: " + index + ".");
+			} else {
+				JOptionPane.showMessageDialog(contentPane, "Neuspesno brisanje kursa!");
+			}
 		}
 	}
 }

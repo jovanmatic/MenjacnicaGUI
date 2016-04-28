@@ -65,4 +65,14 @@ public class GUIKontroler {
 	public static LinkedList<Kurs> getKurs() {
 		return kursevi;
 	}
+
+	public static void izborRedaZaBrisanje() {
+		JOptionPane.showMessageDialog(menjacnicaGui.getContentPane(), "Morate izabrati red koji zelite da obrisete!", "ERROR!", JOptionPane.ERROR_MESSAGE);
+		
+	}
+
+	public static void izbrisiOznaceniRed(Kurs kurs) {
+		kursevi.remove(kurs);
+		menjacnicaGui.refreshTable();
+	}
 }

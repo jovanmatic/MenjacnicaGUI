@@ -156,7 +156,8 @@ public class DodajKursGUI extends JFrame {
 		if (btnOdustani == null) {
 			btnOdustani = new JButton("Odustani");
 			btnOdustani.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {	
+				public void actionPerformed(ActionEvent e) {
+					dispose();
 				}
 			});
 		}
