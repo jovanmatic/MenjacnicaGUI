@@ -75,4 +75,15 @@ public class GUIKontroler {
 		kursevi.remove(kurs);
 		menjacnicaGui.refreshTable();
 	}
+
+	public static void ispisIzmene(String valuta, double iznos, String izbor) {
+		menjacnicaGui.ispisZamene(valuta, iznos, izbor);
+		
+	}
+
+	public static void pokreniProzorIzvrsiZamenuGUI() {
+		IzvrsiZamenuGUI zamena = new IzvrsiZamenuGUI();
+		zamena.setVisible(true);
+		zamena.setLocationRelativeTo(null);
+	}
 }
