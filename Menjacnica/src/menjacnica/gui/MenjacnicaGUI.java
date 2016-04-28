@@ -42,7 +42,7 @@ public class MenjacnicaGUI extends JFrame {
 	private JPanel contentPane;
 	private JMenuBar menuBar;
 	private JMenu mnFile;
-	private JMenuItem mntmNewMenuItem;
+	private JMenuItem mntmOpen;
 	private JMenuItem mntmSave;
 	private JMenuItem mntmExit;
 	private JMenu mnHelp;
@@ -95,16 +95,16 @@ public class MenjacnicaGUI extends JFrame {
 	private JMenu getMnFile() {
 		if (mnFile == null) {
 			mnFile = new JMenu("File");
-			mnFile.add(getMntmNewMenuItem());
+			mnFile.add(getMntmOpen());
 			mnFile.add(getMntmSave());
 			mnFile.add(getMntmExit());
 		}
 		return mnFile;
 	}
-	private JMenuItem getMntmNewMenuItem() {
-		if (mntmNewMenuItem == null) {
-			mntmNewMenuItem = new JMenuItem("Open");
-			mntmNewMenuItem.addActionListener(new ActionListener() {
+	private JMenuItem getMntmOpen() {
+		if (mntmOpen == null) {
+			mntmOpen = new JMenuItem("Open");
+			mntmOpen.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					JFileChooser fc = new JFileChooser();
 					int povVrednost = fc.showOpenDialog(getTextArea());
@@ -114,10 +114,10 @@ public class MenjacnicaGUI extends JFrame {
 					}
 				}
 			});
-			mntmNewMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-			mntmNewMenuItem.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/Directory.gif")));
+			mntmOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+			mntmOpen.setIcon(new ImageIcon(MenjacnicaGUI.class.getResource("/com/sun/java/swing/plaf/windows/icons/Directory.gif")));
 		}
-		return mntmNewMenuItem;
+		return mntmOpen;
 	}
 	private JMenuItem getMntmSave() {
 		if (mntmSave == null) {
@@ -125,7 +125,7 @@ public class MenjacnicaGUI extends JFrame {
 			mntmSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JFileChooser fc = new JFileChooser();
-					int povVrednost = fc.showOpenDialog(getTextArea());
+					int povVrednost = fc.showSaveDialog(getTextArea());
 					if(povVrednost == JFileChooser.APPROVE_OPTION) {
 						File fajl = fc.getSelectedFile();
 						textArea.setText(textArea.getText() + " Sacuvan fajl: " + fajl + "\n");
